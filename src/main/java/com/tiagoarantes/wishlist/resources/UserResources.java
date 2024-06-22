@@ -1,6 +1,5 @@
 package com.tiagoarantes.wishlist.resources;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.tiagoarantes.wishlist.domain.Product;
 import com.tiagoarantes.wishlist.domain.User;
@@ -24,64 +22,76 @@ import com.tiagoarantes.wishlist.dto.VerifyProductResponseDTO;
 import com.tiagoarantes.wishlist.services.ProductServices;
 import com.tiagoarantes.wishlist.services.UserServices;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(value = "/users")
+@Tag(name = "Gerenciar lista de desejos do cliente")
 public class UserResources {
 
 	@Autowired
-	UserServices service;
+	private UserServices service;
 	
 	@Autowired
-	ProductServices serviceProduct;
+	private ProductServices serviceProduct;
 
+	@Operation(summary = "Buscar todos os clientes cadastrados")
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
-		List<User> list = service.findAll();
-		List<UserDTO> listDTO = list.stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
+		var list = service.findAll();
+		var listDTO = list.stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
 	
+	@Operation(summary = "Buscar o cliente pelo id")
 	@GetMapping(value="/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable String id) {
 		var user = service.findById(id);
-		return ResponseEntity.ok().body(new UserDTO(user));
+		var userResponse = new UserDTO(user);
+		return ResponseEntity.ok().body(userResponse);
 	}
 	
+	@Operation(summary = "Excluir um cliente cadastrado")
 	@DeleteMapping(value="/{id}")
 	public ResponseEntity<Void> delete(@PathVariable String id) {
 		service.delete(id);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Operation(summary = "Inserir um cliente")
 	@PostMapping
 	public ResponseEntity<Void> insert(@RequestBody UserDTO request) {
 		var user = User.builder().email(request.getEmail()).documento(request.getDocumento()).name(request.getName()).id(request.getId()).build();
-		user = service.insert(user);
+		service.insert(user);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@Operation(summary = "Atualizar um cliente cadastrado")
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Void> update(@RequestBody UserDTO request, @PathVariable String id) {
 		var user = User.builder().email(request.getEmail()).name(request.getName()).id(id).build();
-		user = service.update(user);
+		service.update(user);
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Operation(summary = "Consultar todos os produtos da lista de desejos do cliente")
 	@GetMapping(value="/{id}/wishlist")
 	public ResponseEntity<List<Product>> findWishList(@PathVariable String id) {
 		var user = service.findById(id);
 		return ResponseEntity.ok().body(user.getWishlist());
 	}
 	
+	@Operation(summary = "Adicionar um produto na lista de desejos do cliente")
 	@PostMapping("/{userId}/product/{productId}")
 	public ResponseEntity<Void> insertProductWishList(@PathVariable String userId, @PathVariable String productId) {
 		var user = service.findById(userId);
 		var product = serviceProduct.findById(productId);
-		user = service.insertProductWishList(user, product);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-		return ResponseEntity.created(uri).build();
+		service.insertProductWishList(user, product);
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
+	@Operation(summary = "Remover um produto da lista de desejos do cliente")
 	@DeleteMapping("/{userId}/product/{productId}")
 	public ResponseEntity<Void> deleteProductWishList(@PathVariable String userId, @PathVariable String productId) {
 		var user = service.findById(userId);
@@ -90,6 +100,7 @@ public class UserResources {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@Operation(summary = "Consultar se um determinado produto está presente na lista de desejos do cliente")
 	@GetMapping("/{userId}/product/{productId}")
 	public ResponseEntity<VerifyProductResponseDTO> verifyPresentWishList(@PathVariable String userId, @PathVariable String productId) {
 		var user = service.verifyPresentWishList(userId, productId);

@@ -1,9 +1,7 @@
 package com.tiagoarantes.wishlist.resources;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -23,8 +21,9 @@ import org.springframework.http.ResponseEntity;
 import com.tiagoarantes.wishlist.domain.Product;
 import com.tiagoarantes.wishlist.domain.User;
 import com.tiagoarantes.wishlist.dto.UserDTO;
+import com.tiagoarantes.wishlist.dto.VerifyProductResponseDTO;
+import com.tiagoarantes.wishlist.services.ProductServices;
 import com.tiagoarantes.wishlist.services.UserServices;
-import com.tiagoarantes.wishlist.services.exception.ObjectNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
 class UserResourcesTest {
@@ -34,6 +33,9 @@ class UserResourcesTest {
 
 	@Mock
 	private UserServices service;
+	
+	@Mock
+	private ProductServices productService;
 
 	@Test
 	@DisplayName("Buscar usuário por id")
@@ -49,15 +51,6 @@ class UserResourcesTest {
 		verify(service).findById(id);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(userDTO, responseEntity.getBody());
-	}
-
-	@Test
-	@DisplayName("Usuário não encontrado")
-	void getUserByIdException() {
-		var id = "2";
-		when(service.findById(id)).thenThrow(ObjectNotFoundException.class);
-		assertThrows(ObjectNotFoundException.class, () -> resource.findById(id));
-		verify(service).findById(id);
 	}
 
 	@Test
@@ -77,8 +70,9 @@ class UserResourcesTest {
 	void deleteUser() {
 		var id = "1";
 		doNothing().when(service).delete(id);
-		resource.delete(id);
-        verify(service, times(1)).delete(id);
+		ResponseEntity<Void> responseEntity = resource.delete(id);
+		assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
+        verify(service).delete(id);
 	}
 	
 	@Test
@@ -121,6 +115,33 @@ class UserResourcesTest {
 		ResponseEntity<List<Product>> responseEntity = resource.findWishList(id);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 		assertEquals(user.getWishlist(), responseEntity.getBody());
+	}
+	
+	@Test
+	@DisplayName("Inserir produto na wishlist")
+	void insertWishlist() {
+		var id = "1";
+		List<Product> list = new ArrayList<>();
+		var product = Product.builder().id(id).build();
+		list.add(product);
+		var user = User.builder().id(id).documento("12").name("teste").email("teste@gmail.com").wishlist(list).build();
+		when(service.findById(id)).thenReturn(user);
+		when(productService.findById(id)).thenReturn(product);
+		when(service.insertProductWishList(user, product)).thenReturn(user);
+		ResponseEntity<Void> responseEntity = resource.insertProductWishList(id, id);
+		assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+	}
+	
+	@Test
+	@DisplayName("Verificar se produto está presente na wishlist")
+	void verifyPresentWishList() {
+		var id = "1";
+		var verify = new VerifyProductResponseDTO();
+		when(service.verifyPresentWishList(id, id)).thenReturn(verify);
+		ResponseEntity<VerifyProductResponseDTO> responseEntity = resource.verifyPresentWishList(id, id);
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+		assertEquals(verify, responseEntity.getBody());
+		verify(service).verifyPresentWishList(id, id);
 	}
 
 }

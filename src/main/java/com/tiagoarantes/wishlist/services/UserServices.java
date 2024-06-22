@@ -20,7 +20,7 @@ import com.tiagoarantes.wishlist.services.exception.WishlistException;
 public class UserServices {
 
 	@Autowired
-	UserRepository repo;
+	private UserRepository repo;
 	
 	public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Cliente não encontrado";
     public static final String WISHLIST_EXCEPTION_MESSAGE = "Lista cheia";
@@ -51,6 +51,7 @@ public class UserServices {
 	private void updateData(User user, User obj) {
 		user.setEmail(obj.getEmail());
 		user.setName(obj.getName());
+		user.setDocumento(obj.getDocumento());
 		user.setWishlist(obj.getWishlist());
 	}
 
@@ -66,7 +67,7 @@ public class UserServices {
 			user.getWishlist().add(product);
 			return repo.save(user);
 		}
-		if(user.getWishlist().size() == WISHLIST_MAX_SIZE) {
+		if(user.getWishlist().size() >= WISHLIST_MAX_SIZE) {
 			throw new WishlistException(WISHLIST_EXCEPTION_MESSAGE);
 		}
 		var obj = verifyPresentWishList(user.getId(), product.getId());

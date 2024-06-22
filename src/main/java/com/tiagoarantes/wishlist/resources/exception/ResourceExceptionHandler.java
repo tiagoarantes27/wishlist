@@ -33,7 +33,7 @@ public class ResourceExceptionHandler {
 	}
 	
 	@ExceptionHandler(RemoveWishlistException.class)
-	public ResponseEntity<StandardError> RemoveWishlistException(RemoveWishlistException e, HttpServletRequest request){
+	public ResponseEntity<StandardError> removeWishlistException(RemoveWishlistException e, HttpServletRequest request){
 		var status = HttpStatus.BAD_REQUEST;
 		var err = StandardError.builder().timestamp(System.currentTimeMillis()).error(WISHLIST_NOT_PRESENT_EXCEPTION_MESSAGE).status(status.value()).message(e.getMessage()).path(request.getRequestURI()).build();
 		return ResponseEntity.status(status).body(err);

@@ -14,7 +14,7 @@ import com.tiagoarantes.wishlist.services.exception.ObjectNotFoundException;
 public class ProductServices {
 
 	@Autowired
-	ProductRepository repo;
+	private ProductRepository repo;
 	
 	public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Produto não encontrado";
 
@@ -40,6 +40,8 @@ public class ProductServices {
 	private void updateData(Product product, Product obj) {
 		product.setPrice(obj.getPrice());
 		product.setName(obj.getName());
+		product.setDescription(obj.getDescription());
+		product.setImagem(obj.getImagem());
 	}
 
 	public void delete(String id) {
