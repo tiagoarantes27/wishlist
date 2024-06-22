@@ -1,7 +1,7 @@
 # Lista de Desejos
-###Introdução
+### Introdução
 
-A ideia é de um Microserviço para gerencia uma Wishlist (lista de desejos) do cliente em e-commerce. O cliente será capaz de realizar a buscar e selecionar um produto, inserir ou remove-lo de sua Wishlist. O cliente poderá também visualizar a sua lista de desejo ou vericar se um determinado produto está presente na lista.
+A ideia é de um Microserviço para gerenciar uma Wishlist (lista de desejos) do cliente em e-commerce. O cliente será capaz de realizar a buscar e selecionar um produto, inserir ou remove-lo de sua Wishlist. O cliente poderá também visualizar a sua lista de desejo ou vericar se um determinado produto está presente na lista.
 
 #### Processo de instalação
 
@@ -76,7 +76,7 @@ Para rodar o código é necessário seguir as etapas abaixo:
 
 #### Swagger UI
 
-A documentação da API pode ser acessada através do Swagger UI após iniciar o projeto:
+As requisiçõs da API pode ser acessada através do Swagger UI após iniciar o projeto:
 - http://localhost:8090/swagger-ui/index.html#/
 	
 #### Postman Collection
