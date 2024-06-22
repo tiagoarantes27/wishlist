@@ -76,7 +76,7 @@ Para rodar o código é necessário seguir as etapas abaixo:
 
 #### Swagger UI
 
-As requisiçõs da API pode ser acessada através do Swagger UI após iniciar o projeto:
+As requisiçõs da API podem ser acessadas através do Swagger UI após iniciar o projeto:
 - http://localhost:8090/swagger-ui/index.html#/
 	
 #### Postman Collection
