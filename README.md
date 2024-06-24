@@ -1,9 +1,9 @@
 # Lista de Desejos
-###Introdução
+### Introdução
 
-A ideia é de um Microserviço para gerencia uma Wishlist (lista de desejos) do cliente em e-commerce, para que o cliente possa realizar a buscar e selecionar um produto e inserir ou remove-lo de sua Wishlist. O cliente poderá também visualizar a sua lista de desejo ou vericar se um determinado produto está presente na lista.
+A ideia é de um Microserviço para gerenciar uma Wishlist (lista de desejos) do cliente em e-commerce. O cliente será capaz de realizar a buscar e selecionar um produto, inserir ou remove-lo de sua Wishlist. O cliente poderá também visualizar a sua lista de desejo ou vericar se um determinado produto está presente na lista.
 
-####Processo de instalação
+#### Processo de instalação
 
 - Instale o IntelliJ IDEA ou a IDE de sua preferência (configure o lombok na IDE)
 - Instale a JDK
@@ -26,7 +26,7 @@ Para rodar o código é necessário seguir as etapas abaixo:
 - Suba o banco na sua máquina, conforme os passos abaixo
 - Builde o código
 
-#### instalação do MongoDb
+#### Instalação do MongoDb
 
 - Windows:
 	- https://www.mongodb.com -> Download -> Community Server
@@ -54,7 +54,7 @@ Para rodar o código é necessário seguir as etapas abaixo:
 
 | Método  | Rota                                | Descrição                                          | Autenticação |
 | ------- | ----------------------------------- | -------------------------------------------------- | ------------ |
-| POST    | /users/{userId}/product/{productId} | Adicionar Produto na Withlist do cliente           | Público      |
+| PATCH   | /users/{userId}/product/{productId} | Adicionar Produto na Withlist do cliente           | Público      |
 | GET     | /users/{userId}/product/{productId} | Consultar se produto está na wishlist do cliente   | Público      |
 | GET     | /users/{userId}/wishlist            | Consultar todos os produtos da wishlist do cliente | Público      |
 | DELETE  | /users/{userId}/product/{productId} | Remover produto da wishlist do cliente             | Público      |
@@ -76,12 +76,12 @@ Para rodar o código é necessário seguir as etapas abaixo:
 
 #### Swagger UI
 
-A documentação da API pode ser acessada através do Swagger UI após iniciar o projeto:
-	- http://localhost:8090/swagger-ui/index.html#/
+As requisiçõs da API podem ser acessadas através do Swagger UI após iniciar o projeto:
+- http://localhost:8090/swagger-ui/index.html#/
 	
 #### Postman Collection
 
 Foi anexado ao projeto a collection do postman para facilitar com os testes das funcionalidades:
-	- https://github.com/tiagoarantes27/wishlist/blob/master/src/main/resources/documents/wishlist.postman_collection.json
+- https://github.com/tiagoarantes27/wishlist/blob/master/src/main/resources/documents/wishlist.postman_collection.json
 
 
