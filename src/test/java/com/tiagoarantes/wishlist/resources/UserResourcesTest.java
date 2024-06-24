@@ -136,7 +136,7 @@ class UserResourcesTest {
 	@DisplayName("Verificar se produto está presente na wishlist")
 	void verifyPresentWishList() {
 		var id = "1";
-		var verify = new VerifyProductResponseDTO();
+		var verify = VerifyProductResponseDTO.builder().hasProductInWishlist(true).productId(id).message("Produto encontrado").build();
 		when(service.verifyPresentWishList(id, id)).thenReturn(verify);
 		ResponseEntity<VerifyProductResponseDTO> responseEntity = resource.verifyPresentWishList(id, id);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

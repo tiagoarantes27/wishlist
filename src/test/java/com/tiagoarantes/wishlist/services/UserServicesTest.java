@@ -172,7 +172,7 @@ class UserServicesTest {
 		list.add(product);
 		var user = User.builder().id(id).documento("123").wishlist(list).build();
 		when(repo.isPresent(id, id)).thenReturn(user);
-		var sucesso = new VerifyProductResponseDTO(product);
+		var sucesso = VerifyProductResponseDTO.builder().hasProductInWishlist(true).productId(id).message("Produto encontrado").build();
 		var result = service.verifyPresentWishList(id, id);
 		assertEquals(sucesso, result);
         assertThat(result).usingRecursiveComparison().isEqualTo(sucesso);
@@ -183,7 +183,7 @@ class UserServicesTest {
 	void verifyWishlistFalse() {
 		var id = "1";
 		when(repo.isPresent(id, id)).thenReturn(null);
-		var sucesso = new VerifyProductResponseDTO();
+		var sucesso = VerifyProductResponseDTO.builder().hasProductInWishlist(false).productId(id).message("Produto não encontrado na lista").build();
 		var result = service.verifyPresentWishList(id, id);
 		assertEquals(sucesso, result);
         assertThat(result).usingRecursiveComparison().isEqualTo(sucesso);

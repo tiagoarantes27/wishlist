@@ -15,6 +15,7 @@ import com.tiagoarantes.wishlist.repository.UserRepository;
 import com.tiagoarantes.wishlist.services.exception.ObjectNotFoundException;
 import com.tiagoarantes.wishlist.services.exception.RemoveWishlistException;
 import com.tiagoarantes.wishlist.services.exception.WishlistException;
+import static com.tiagoarantes.wishlist.services.constants.WishlistConstants.*;
 
 @Service
 public class UserServices {
@@ -22,13 +23,6 @@ public class UserServices {
 	@Autowired
 	private UserRepository repo;
 	
-	public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Cliente não encontrado";
-    public static final String WISHLIST_EXCEPTION_MESSAGE = "Lista cheia";
-    public static final String WISHLIST_PRESENT_EXCEPTION_MESSAGE = "Produto já está presente na lista de desejos";
-    public static final String WISHLIST_EMPTY_EXCEPTION_MESSAGE = "Lista de desejos já está vazia";
-    public static final String WISHLIST_OVER_EXCEPTION_MESSAGE = "Produto não está presente na lista de desejos";
-    public static final int WISHLIST_MAX_SIZE = 20;
-
 	public List<User> findAll() {
 		return repo.findAll();
 	}
@@ -80,9 +74,17 @@ public class UserServices {
 	public VerifyProductResponseDTO verifyPresentWishList(String userId, String productId) {
 		var user = repo.isPresent(userId, productId);
 		if(Objects.isNull(user)) {
-			return new VerifyProductResponseDTO();
+			return productNotFound(productId);
         }
-		return new VerifyProductResponseDTO(user.getWishlist().get(0));
+		return productFound(productId);
+	}
+
+	private VerifyProductResponseDTO productFound(String productId) {
+		return VerifyProductResponseDTO.builder().hasProductInWishlist(true).productId(productId).message(PRODUCT_FOUND).build();
+	}
+
+	private VerifyProductResponseDTO productNotFound(String productId) {
+		return VerifyProductResponseDTO.builder().hasProductInWishlist(false).productId(productId).message(PRODUCT_NOT_FOUND).build();
 	}
 
 	public void deleteProductWishList(User user, Product product) {
