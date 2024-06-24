@@ -1,6 +1,10 @@
 package com.tiagoarantes.wishlist.services.constants;
 
 public class WishlistConstants {
+	
+	private WishlistConstants() {
+		throw new IllegalStateException("Utility class");
+	}
 
 	public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Cliente não encontrado";
     public static final String WISHLIST_EXCEPTION_MESSAGE = "Lista cheia";

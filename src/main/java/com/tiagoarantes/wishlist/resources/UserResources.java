@@ -1,7 +1,6 @@
 package com.tiagoarantes.wishlist.resources;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,17 +30,20 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Gerenciar lista de desejos do cliente")
 public class UserResources {
 
-	@Autowired
 	private UserServices service;
+	private ProductServices serviceProduct;
 	
 	@Autowired
-	private ProductServices serviceProduct;
+	public UserResources(ProductServices serviceProduct, UserServices userService) {
+		this.service = userService;
+		this.serviceProduct = serviceProduct;
+	}
 
 	@Operation(summary = "Buscar todos os clientes cadastrados")
 	@GetMapping
 	public ResponseEntity<List<UserDTO>> findAll() {
 		var list = service.findAll();
-		var listDTO = list.stream().map(user -> new UserDTO(user)).collect(Collectors.toList());
+		var listDTO = list.stream().map(UserDTO::new).toList();
 		return ResponseEntity.ok().body(listDTO);
 	}
 	

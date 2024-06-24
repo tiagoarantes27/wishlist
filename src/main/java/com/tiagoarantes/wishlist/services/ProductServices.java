@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static com.tiagoarantes.wishlist.services.constants.WishlistConstants.*;
 import com.tiagoarantes.wishlist.domain.Product;
 import com.tiagoarantes.wishlist.repository.ProductRepository;
 import com.tiagoarantes.wishlist.services.exception.ObjectNotFoundException;
@@ -13,11 +14,13 @@ import com.tiagoarantes.wishlist.services.exception.ObjectNotFoundException;
 @Service
 public class ProductServices {
 
-	@Autowired
-	private ProductRepository repo;
 	
-	public static final String NOT_FOUND_EXCEPTION_MESSAGE = "Produto não encontrado";
+	private ProductRepository repo;
 
+	@Autowired
+	public ProductServices(ProductRepository repository) {
+		this.repo = repository;
+	}
 	public List<Product> findAll() {
 		return repo.findAll();
 	}

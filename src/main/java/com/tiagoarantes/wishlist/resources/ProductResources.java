@@ -24,8 +24,13 @@ import io.swagger.v3.oas.annotations.Operation;
 @RequestMapping(value = "/products")
 public class ProductResources {
 
-	@Autowired
+	
 	private ProductServices service;
+	
+	@Autowired
+	public ProductResources(ProductServices service) {
+		this.service = service;
+	}
 
 	@Operation(summary = "Buscar todos os produtos cadastrados")
 	@GetMapping

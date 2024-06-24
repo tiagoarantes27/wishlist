@@ -20,9 +20,13 @@ import static com.tiagoarantes.wishlist.services.constants.WishlistConstants.*;
 @Service
 public class UserServices {
 
-	@Autowired
+	
 	private UserRepository repo;
 	
+	@Autowired
+	public UserServices(UserRepository repository) {
+		this.repo = repository;
+	}
 	public List<User> findAll() {
 		return repo.findAll();
 	}
@@ -74,17 +78,9 @@ public class UserServices {
 	public VerifyProductResponseDTO verifyPresentWishList(String userId, String productId) {
 		var user = repo.isPresent(userId, productId);
 		if(Objects.isNull(user)) {
-			return productNotFound(productId);
+			return VerifyProductResponseDTO.builder().hasProductInWishlist(false).productId(productId).message(PRODUCT_NOT_FOUND).build();
         }
-		return productFound(productId);
-	}
-
-	private VerifyProductResponseDTO productFound(String productId) {
 		return VerifyProductResponseDTO.builder().hasProductInWishlist(true).productId(productId).message(PRODUCT_FOUND).build();
-	}
-
-	private VerifyProductResponseDTO productNotFound(String productId) {
-		return VerifyProductResponseDTO.builder().hasProductInWishlist(false).productId(productId).message(PRODUCT_NOT_FOUND).build();
 	}
 
 	public void deleteProductWishList(User user, Product product) {
