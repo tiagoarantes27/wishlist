@@ -59,7 +59,7 @@ public class ProductResources {
 	@Operation(summary = "Atualizar um produto")
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Void> update(@RequestBody ProductDTO request, @PathVariable String id) {
-		var product = Product.builder().description(request.getDescription()).imagem(request.getImagem()).name(request.getName()).price(request.getPrice()).build();
+		var product = Product.builder().description(request.getDescription()).id(id).imagem(request.getImagem()).name(request.getName()).price(request.getPrice()).build();
 		service.update(product);
 		return ResponseEntity.noContent().build();
 	}

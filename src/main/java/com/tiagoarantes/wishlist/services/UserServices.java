@@ -52,7 +52,6 @@ public class UserServices {
 		user.setEmail(obj.getEmail());
 		user.setName(obj.getName());
 		user.setDocumento(obj.getDocumento());
-		user.setWishlist(obj.getWishlist());
 	}
 
 	public void delete(String id) {
@@ -90,7 +89,6 @@ public class UserServices {
 		if(Objects.isNull(user.getWishlist())) {
 			throw new RemoveWishlistException(WISHLIST_EMPTY_EXCEPTION_MESSAGE);
 		}
-
 		if(!user.getWishlist().remove(product)){
 			throw new RemoveWishlistException(WISHLIST_OVER_EXCEPTION_MESSAGE);
 		}

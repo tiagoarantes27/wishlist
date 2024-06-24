@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -62,7 +63,7 @@ public class UserResources {
 	@Operation(summary = "Inserir um cliente")
 	@PostMapping
 	public ResponseEntity<Void> insert(@RequestBody UserDTO request) {
-		var user = User.builder().email(request.getEmail()).documento(request.getDocumento()).name(request.getName()).id(request.getId()).build();
+		var user = User.builder().email(request.getEmail()).documento(request.getDocumento()).name(request.getName()).build();
 		service.insert(user);
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
@@ -70,7 +71,7 @@ public class UserResources {
 	@Operation(summary = "Atualizar um cliente cadastrado")
 	@PutMapping(value="/{id}")
 	public ResponseEntity<Void> update(@RequestBody UserDTO request, @PathVariable String id) {
-		var user = User.builder().email(request.getEmail()).name(request.getName()).id(id).build();
+		var user = User.builder().email(request.getEmail()).documento(request.getDocumento()).name(request.getName()).id(id).build();
 		service.update(user);
 		return ResponseEntity.noContent().build();
 	}
@@ -83,7 +84,7 @@ public class UserResources {
 	}
 	
 	@Operation(summary = "Adicionar um produto na lista de desejos do cliente")
-	@PostMapping("/{userId}/product/{productId}")
+	@PatchMapping("/{userId}/product/{productId}")
 	public ResponseEntity<Void> insertProductWishList(@PathVariable String userId, @PathVariable String productId) {
 		var user = service.findById(userId);
 		var product = serviceProduct.findById(productId);
